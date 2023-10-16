@@ -1,0 +1,542 @@
+﻿schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+type Mutation {
+  addCellBook(ID: ID!, cellId: String): messageResponse @aws_cognito_user_pools
+  createAge(input: CreateAgeInput!): messageResponse @aws_api_key
+  createBook(input: CreateBookInput!): messageResponse @aws_api_key
+  createBookType(input: CreateBookTypeInput!): messageResponse @aws_api_key
+  createBookcase(input: CreateBookcaseInput!): messageResponse @aws_cognito_user_pools
+  createCell(input: CreateCellInput!): messageResponse @aws_cognito_user_pools
+  createHelp(input: CreateHelpInput): messageResponse @aws_api_key
+  createQuestion(input: CreateQuestionInput): messageResponse @aws_api_key
+  createShelve(input: CreateShelveInput!): messageResponse @aws_cognito_user_pools
+  createUser(input: CreateUserInput!): messageResponse @aws_api_key
+  deleteAge(input: DeleteAgeInput!): messageResponse @aws_api_key
+  deleteBook(input: DeleteBookInput!): messageResponse @aws_api_key
+  deleteBookType(input: DeleteBookTypeInput!): messageResponse @aws_api_key
+  deleteBookcase(input: DeleteBookcaseInput!): messageResponse @aws_cognito_user_pools
+  deleteCell(input: DeleteCellInput!): messageResponse @aws_cognito_user_pools
+  deleteCellBook(ID: ID!, cellId: String!): messageResponse @aws_cognito_user_pools
+  deleteCells(ID: [ID]!): messageResponse @aws_cognito_user_pools
+  deleteHelp(input: DeleteHelpInput): messageResponse @aws_api_key
+  deleteQuestion(input: DeleteQuestionInput): messageResponse @aws_api_key
+  deleteShelve(input: DeleteShelveInput!): messageResponse @aws_cognito_user_pools
+  deleteUser(input: DeleteUserInput!): messageResponse @aws_cognito_user_pools
+  moveCell(input: MoveCellInput!): messageResponse @aws_cognito_user_pools
+  scanGroup(ISBN: [String], cellId: String): messageResponse @aws_cognito_user_pools
+  updateAge(input: UpdateAgeInput!): messageResponse @aws_api_key
+  updateBook(input: UpdateBookInput!): messageResponse @aws_api_key
+  updateBookType(input: UpdateBookTypeInput!): messageResponse @aws_api_key
+  updateBookcase(input: UpdateBookcaseInput!): messageResponse @aws_cognito_user_pools
+  updateCell(input: UpdateCellInput!): messageResponse @aws_cognito_user_pools
+  updateHelp(input: UpdateHelpInput): messageResponse @aws_api_key
+  updateQuestion(input: UpdateQuestionInput): messageResponse @aws_api_key
+  updateShelve(input: UpdateShelveInput!): messageResponse @aws_cognito_user_pools
+  updateUser(input: UpdateUserInput!): messageResponse @aws_cognito_user_pools
+}
+
+type Query {
+  allBookcaseItem(Id: ID): [allBookCases] @aws_cognito_user_pools
+  communication: communicationConnection @aws_api_key
+  getAge(ID: ID!): age @aws_api_key
+  getBook(ID: String!): book @aws_api_key
+  getBookType(ID: ID!): bookType
+  getBookcase(Id: ID!): bookcase @aws_cognito_user_pools
+  getBookcaseShelve(Id: ID!): shelveConnection @aws_cognito_user_pools
+  getCell(ID: ID!): cell @aws_cognito_user_pools
+  getCellBook(ID: ID!): [book] @aws_cognito_user_pools
+  getHelpName: typeConnection @aws_api_key
+  getISBN(ISBN: String): bookConnection @aws_api_key
+  getQuestion(type: String!): questionConnection @aws_api_key
+  getShelve(ID: ID!): shelve @aws_cognito_user_pools
+  getShelveCell(ID: ID!): [cell] @aws_cognito_user_pools
+  getUser: user @aws_cognito_user_pools
+  getUserBookcase: [bookcase] @aws_cognito_user_pools
+  listAges: [age] @aws_api_key
+  listBookTypes(LastEvaluatedKey: String, limit: Int): bookTypeConnection
+  listCells(LastEvaluatedKey: String, limit: Int): cellConnection @aws_cognito_user_pools
+  listUsers(LastEvaluatedKey: String, limit: Int): userConnection
+  searchAllBookcase(LastEvaluatedKey: String, limit: Int, name: String): bookcaseConnection @aws_cognito_user_pools
+  searchAllBooks(LastEvaluatedKey: String, limit: Int, name: String): bookSearcConnection @aws_api_key
+  searchAllShelves(LastEvaluatedKey: String, limit: Int, name: String): shelveConnection @aws_cognito_user_pools
+  searchQuestion(LastEvaluatedKey: String, limit: Int, title: String): questionConnection @aws_api_key
+}
+
+type Subscription {
+  onCreateAge(ID: ID, age: String): messageResponse @aws_subscribe(mutations : ["createAge"])
+  onCreateBook(ID: String, author: String, date: String, language: String, name: String): messageResponse @aws_subscribe(mutations : ["createBook"])
+  onCreateBookType(ID: ID, name: String): messageResponse @aws_subscribe(mutations : ["createBookType"])
+  onCreateBookcase(Id: ID, name: String, shelvesNumber: Int, userId: String): messageResponse @aws_subscribe(mutations : ["createBookcase"])
+  onCreateCell(ID: ID, bookId: [String], bookcaseId: String, name: String, shelveId: String): messageResponse @aws_subscribe(mutations : ["createCell"])
+  onCreateShelve(ID: ID, bookcaseId: String, name: String, userId: String): messageResponse @aws_subscribe(mutations : ["createShelve"])
+  onCreateUser(ID: ID, age: Int, bookType: String, gender: String, name: String): messageResponse @aws_subscribe(mutations : ["createUser"])
+  onDeleteAge(ID: ID, age: String): messageResponse @aws_subscribe(mutations : ["deleteAge"])
+  onDeleteBook(ID: String, author: String, date: String, language: String, name: String): messageResponse @aws_subscribe(mutations : ["deleteBook"])
+  onDeleteBookType(ID: ID, name: String): messageResponse @aws_subscribe(mutations : ["deleteBookType"])
+  onDeleteBookcase(Id: ID, name: String, shelvesNumber: Int, userId: String): messageResponse @aws_subscribe(mutations : ["deleteBookcase"])
+  onDeleteCell(ID: ID, bookId: [String], bookcaseId: String, name: String, shelveId: String): messageResponse @aws_subscribe(mutations : ["deleteCell"])
+  onDeleteShelve(ID: ID, bookcaseId: String, name: String, userId: String): messageResponse @aws_subscribe(mutations : ["deleteShelve"])
+  onDeleteUser(ID: ID, age: Int, bookType: String, gender: String, name: String): messageResponse @aws_subscribe(mutations : ["deleteUser"])
+  onUpdateAge(ID: ID, age: String): messageResponse @aws_subscribe(mutations : ["updateAge"])
+  onUpdateBook(ID: String, author: String, date: String, language: String, name: String): messageResponse @aws_subscribe(mutations : ["updateBook"])
+  onUpdateBookType(ID: ID, name: String): messageResponse @aws_subscribe(mutations : ["updateBookType"])
+  onUpdateBookcase(Id: ID, name: String, shelvesNumber: Int, userId: String): messageResponse @aws_subscribe(mutations : ["updateBookcase"])
+  onUpdateCell(ID: ID, bookId: [String], bookcaseId: String, name: String, shelveId: String): messageResponse @aws_subscribe(mutations : ["updateCell"])
+  onUpdateShelve(ID: ID, bookcaseId: String, name: String, userId: String): messageResponse @aws_subscribe(mutations : ["updateShelve"])
+  onUpdateUser(ID: ID, age: Int, bookType: String, gender: String, name: String): messageResponse @aws_subscribe(mutations : ["updateUser"])
+}
+
+type age @aws_api_key {
+  ID: ID!
+  age: String
+}
+
+type allBookCases @aws_cognito_user_pools {
+  ID: ID
+  bookcaseId: String
+  cell: [allCellBooks]
+  name: String
+  userid: String
+}
+
+type allCellBooks @aws_cognito_user_pools {
+  ID: ID
+  book: String
+  bookcaseId: String
+  name: String
+  shelveId: String
+  userId: String
+}
+
+type book @aws_cognito_user_pools {
+  ID: ID!
+  ISBN: String
+  age: String
+  author: String
+  date: String
+  image: String
+  language: String
+  name: String
+  pages: Int
+  publisher: String
+  purchases: Int
+  size: Float
+  typeId: [String]
+  userId: String
+}
+
+type bookConnection {
+  Items: [book]
+  LastEvaluatedKey: String
+}
+
+type bookSearcConnection {
+  Items: [bookSearch]
+  LastEvaluatedKey: String
+}
+
+type bookSearch @aws_cognito_user_pools {
+  ID: ID
+  author: String
+  date: String
+  image: String
+  name: String
+  typeId: [String]
+}
+
+type bookType @aws_api_key {
+  ID: ID!
+  name: String
+}
+
+type bookTypeConnection {
+  Items: [bookType]
+  LastEvaluatedKey: String
+}
+
+type bookcase @aws_cognito_user_pools {
+  Id: ID!
+  name: String
+  shelvesNumber: Int
+  userId: String
+}
+
+type bookcaseConnection {
+  Items: [bookcase]
+  LastEvaluatedKey: String
+}
+
+type cell @aws_cognito_user_pools {
+  ID: ID!
+  bookId: [String]
+  bookcaseId: String
+  name: String
+  shelveId: String
+  userId: String
+}
+
+type cellConnection {
+  Items: [cell]
+  LastEvaluatedKey: String
+}
+
+type communicationConnection @aws_api_key {
+  address: String
+  email: String
+  phone: String
+}
+
+type messageResponse {
+  message: String
+  status: String
+}
+
+type question @aws_api_key {
+  ID: ID!
+  answer: String
+  title: String
+  type: String
+}
+
+type questionConnection {
+  Items: [question]
+  LastEvaluatedKey: String
+}
+
+type shelve @aws_cognito_user_pools {
+  ID: ID!
+  bookcaseId: String
+  name: String
+  userId: String
+}
+
+type shelveConnection {
+  Items: [shelve]
+  LastEvaluatedKey: String
+}
+
+type typeConnection {
+  Items: [typeQuestion]
+}
+
+type typeQuestion @aws_api_key {
+  ID: ID
+  name: String
+}
+
+type user @aws_api_key @aws_cognito_user_pools {
+  ID: ID!
+  age: String
+  birthDate: String
+  bookType: [String]
+  country: String
+  createdAt: String
+  email: String
+  gender: String
+  image: String
+  name: String
+  phone: String
+  remember: Boolean
+  updatedAt: String
+  username: String
+}
+
+type userConnection {
+  Items: [user]
+  LastEvaluatedKey: String
+}
+
+input CreateAgeInput {
+  age: String
+}
+
+input CreateBookInput {
+  ISBN: String
+  age: String
+  author: String
+  date: String
+  image: String
+  language: String
+  name: String
+  pages: Int
+  publisher: String
+  purchases: Int
+  size: Int
+  typeId: [String]
+}
+
+input CreateBookTypeInput {
+  name: String
+}
+
+input CreateBookcaseInput {
+  name: String
+  shelvesNumber: Int
+}
+
+input CreateCellInput {
+  bookId: [String]
+  bookcaseId: String!
+  name: String
+  shelveId: String!
+}
+
+input CreateHelpInput {
+  name: String!
+}
+
+input CreateQuestionInput {
+  answer: String
+  title: String
+  type: String
+}
+
+input CreateShelveInput {
+  bookcaseId: String!
+  name: String
+}
+
+input CreateUserInput {
+  age: String
+  birthDate: String
+  bookType: [String]
+  country: String
+  email: String
+  gender: String
+  name: String
+  phone: String
+  remember: Boolean
+  username: String
+}
+
+input DeleteAgeInput {
+  ID: ID!
+}
+
+input DeleteBookInput {
+  ID: String!
+}
+
+input DeleteBookTypeInput {
+  ID: ID!
+}
+
+input DeleteBookcaseInput {
+  Id: ID!
+}
+
+input DeleteCellInput {
+  ID: ID!
+}
+
+input DeleteHelpInput {
+  ID: ID!
+}
+
+input DeleteQuestionInput {
+  ID: ID!
+}
+
+input DeleteShelveInput {
+  ID: ID!
+}
+
+input DeleteUserInput {
+  ID: ID!
+}
+
+input MoveCellInput {
+  ID: [ID]!
+  shelveId: String
+}
+
+input TableAgeFilterInput {
+  ID: TableIDFilterInput
+  age: TableStringFilterInput
+}
+
+input TableBookFilterInput {
+  ID: TableIDFilterInput
+  ISBN: TableStringFilterInput
+  age: TableStringFilterInput
+  author: TableStringFilterInput
+  date: TableStringFilterInput
+  image: TableStringFilterInput
+  language: TableStringFilterInput
+  name: TableStringFilterInput
+  pages: TableIntFilterInput
+  publisher: TableStringFilterInput
+  purchases: TableIntFilterInput
+  size: TableFloatFilterInput
+  typeId: TableStringFilterInput
+  userId: TableStringFilterInput
+}
+
+input TableBookTypeFilterInput {
+  ID: TableIDFilterInput
+  name: TableStringFilterInput
+}
+
+input TableBookcaseFilterInput {
+  Id: TableIDFilterInput
+  name: TableStringFilterInput
+  shelvesNumber: TableIntFilterInput
+  userId: TableStringFilterInput
+}
+
+input TableBooleanFilterInput {
+  eq: Boolean
+  ne: Boolean
+}
+
+input TableCellFilterInput {
+  ID: TableIDFilterInput
+  bookId: TableStringFilterInput
+  bookcaseId: TableStringFilterInput
+  name: TableStringFilterInput
+  shelveId: TableStringFilterInput
+}
+
+input TableFloatFilterInput {
+  between: [Float]
+  contains: Float
+  eq: Float
+  ge: Float
+  gt: Float
+  le: Float
+  lt: Float
+  ne: Float
+  notContains: Float
+}
+
+input TableIDFilterInput {
+  beginsWith: ID
+  between: [ID]
+  contains: ID
+  eq: ID
+  ge: ID
+  gt: ID
+  le: ID
+  lt: ID
+  ne: ID
+  notContains: ID
+}
+
+input TableIntFilterInput {
+  between: [Int]
+  contains: Int
+  eq: Int
+  ge: Int
+  gt: Int
+  le: Int
+  lt: Int
+  ne: Int
+  notContains: Int
+}
+
+input TableShelveFilterInput {
+  ID: TableIDFilterInput
+  bookcaseId: TableStringFilterInput
+  name: TableStringFilterInput
+  userId: TableStringFilterInput
+}
+
+input TableStringFilterInput {
+  beginsWith: String
+  between: [String]
+  contains: String
+  eq: String
+  ge: String
+  gt: String
+  le: String
+  lt: String
+  ne: String
+  notContains: String
+}
+
+input TableUserFilterInput {
+  ID: TableIDFilterInput
+  age: TableStringFilterInput
+  birthDate: TableStringFilterInput
+  bookType: TableStringFilterInput
+  country: TableStringFilterInput
+  email: TableStringFilterInput
+  gender: TableStringFilterInput
+  image: TableStringFilterInput
+  name: TableStringFilterInput
+  phone: TableStringFilterInput
+  remember: TableBooleanFilterInput
+  username: TableStringFilterInput
+}
+
+input UpdateAgeInput {
+  ID: ID!
+  age: String
+}
+
+input UpdateBookInput {
+  ID: String!
+  ISBN: String
+  age: String
+  author: String
+  date: String
+  image: String
+  language: String
+  name: String
+  pages: Int
+  publisher: String
+  purchases: Int
+  size: Int
+}
+
+input UpdateBookTypeInput {
+  ID: ID!
+  name: String
+}
+
+input UpdateBookcaseInput {
+  Id: ID!
+  name: String
+  shelvesNumber: Int
+}
+
+input UpdateCellInput {
+  ID: ID!
+  name: String
+}
+
+input UpdateHelpInput {
+  ID: ID!
+  name: String
+}
+
+input UpdateQuestionInput {
+  ID: ID!
+  answer: String
+  title: String
+  type: String
+}
+
+input UpdateShelveInput {
+  ID: ID!
+  name: String
+}
+
+input UpdateUserInput {
+  ID: ID!
+  age: String
+  birthDate: String
+  bookType: [String]
+  country: String
+  email: String
+  gender: String
+  image: String
+  name: String
+  phone: String
+  remember: Boolean
+  username: String
+}
